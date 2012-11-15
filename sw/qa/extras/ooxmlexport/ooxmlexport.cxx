@@ -34,6 +34,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -65,6 +66,7 @@ public:
     void testTablePosition();
     void testFdo47669();
     void testTableBorders();
+    void testFramesPositionColor();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -101,6 +103,7 @@ void Test::run()
         {"table-position.docx", &Test::testTablePosition},
         {"fdo47669.docx", &Test::testFdo47669},
         {"table-borders.docx", &Test::testTableBorders},
+        {"frame-position-color.docx", &Test::testFramesPositionColor},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -469,6 +472,56 @@ void Test::testTableBorders() {
                         borders.getBorder(j), aBorderLine.OuterLineWidth);
             }
         }
+    }
+}
+
+void Test::testFramesPositionColor() {
+    #define RGB_TO_COLOR(r, g, b) sal_Int32((r << 16) | (g << 8) | b)
+    #define RED(c) ((c >> 16) & 0xff)
+    #define GREEN(c) ((c >> 8) & 0xff)
+    #define BLUE(c) ((c >> 0) & 0xff)
+    struct FrameInfo {
+        sal_Int32 x, y, color;
+        FrameInfo(sal_Int32 _x=0, sal_Int32 _y=0, sal_Int32 _color=0) : x(_x), y(_y), color(_color) {}
+    };
+    std::vector<FrameInfo> referenceFrames;
+    // Values read from MS Office
+    referenceFrames.push_back(FrameInfo(12380, 2540, RGB_TO_COLOR(228, 108, 10) ));
+    referenceFrames.push_back(FrameInfo(1900, 1270, RGB_TO_COLOR(0, 0, 0) ));
+    referenceFrames.push_back(FrameInfo(1590, 7300, RGB_TO_COLOR(0, 176, 240) ));
+    referenceFrames.push_back(FrameInfo(5400, 6980, RGB_TO_COLOR(255, 255, 255) ));
+    referenceFrames.push_back(FrameInfo(2540, 11110, RGB_TO_COLOR(255, 0, 0) ));
+    referenceFrames.push_back(FrameInfo(10480, 11100, RGB_TO_COLOR(0, 176, 80) ));
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL((int)referenceFrames.size(), (int)xIndexAccess->getCount());
+    for (int idx=0; idx<xIndexAccess->getCount(); idx++)
+    {
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(idx), uno::UNO_QUERY);
+        // As the order of frames after import may change, we loop through all reference frames
+        // and only compare the frame when a near X value is found.
+        unsigned refIdx = 0;
+        for (; refIdx<referenceFrames.size(); refIdx++)
+        {
+            sal_Int32 nLeftMargin = 0;
+            xFrame->getPropertyValue("HoriOrientPosition") >>= nLeftMargin;
+            if (abs(nLeftMargin - referenceFrames[refIdx].x) > 10)
+                continue;
+            sal_Int32 nTopMargin = 0;
+            xFrame->getPropertyValue("VertOrientPosition") >>= nTopMargin;
+            sal_Int32 color;
+            xFrame->getPropertyValue( "BackColor" ) >>= color;
+
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(referenceFrames[refIdx].x, nLeftMargin, 10);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(referenceFrames[refIdx].y, nTopMargin, 10);
+            // TODO fix: red component may have a off-by one error.
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Color red component is wrong", RED(referenceFrames[refIdx].color), RED(color), 1);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Color green component is wrong", GREEN(referenceFrames[refIdx].color), GREEN(color), 0);
+            CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Color blue component is wrong", BLUE(referenceFrames[refIdx].color), BLUE(color), 0);
+            break;
+        }
+        CPPUNIT_ASSERT_MESSAGE("Frame does not match any reference frame", refIdx != referenceFrames.size());
     }
 }
 
