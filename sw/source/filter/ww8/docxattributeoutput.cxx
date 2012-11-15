@@ -262,27 +262,17 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     m_bParagraphOpened = false;
 
-    // Write the anchored frame if any
-    if ( m_pParentFrame )
-    {
-        sw::Frame *pParentFrame = m_pParentFrame;
-        m_pParentFrame = NULL;
+    // Close the anchored frame if any
+    if (!m_pParentFrames.empty()) {
+        sw::Frame* frame = m_pParentFrames.back();
+        delete frame;
 
-        const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt( );
-        const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+        m_pSerializer->endElementNS( XML_w, XML_txbxContent );
+        m_pSerializer->endElementNS( XML_v, XML_textbox );
 
-        sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
-        sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
-
-        m_rExport.SaveData( nStt, nEnd );
-
-        m_rExport.mpParentFrame = pParentFrame;
-
-        m_rExport.WriteText( );
-
-        m_rExport.RestoreData();
-
-        delete pParentFrame;
+        m_pSerializer->endElementNS( XML_v, XML_rect );
+        m_pSerializer->endElementNS( XML_w, XML_pict );
+        m_pParentFrames.pop_back();
     }
 }
 
@@ -2431,8 +2421,28 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             break;
         case sw::Frame::eTxtBox:
             {
-                // The frame output is postponed to the end of the anchor paragraph
-                m_pParentFrame = new sw::Frame(rFrame);
+                const SdrObject* pSdrObj = rFrame.GetFrmFmt().FindRealSdrObject();
+                m_pSerializer->startElementNS( XML_w, XML_pict, FSEND );
+
+                // We'll write the frame end tag at the end of the paragraph
+                m_rExport.VMLExporter().SetWriteShapeEndTag( false );
+                m_rExport.VMLExporter().AddSdrObject( *pSdrObj );
+                m_rExport.VMLExporter().SetWriteShapeEndTag( true );
+
+                m_pParentFrames.push_back( new sw::Frame(rFrame) );
+
+                const SwFrmFmt& rFrmFmt = rFrame.GetFrmFmt( );
+                const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+
+                sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+                sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+
+                m_pSerializer->startElementNS( XML_v, XML_textbox, FSEND );
+                m_pSerializer->startElementNS( XML_w, XML_txbxContent, FSEND );
+                m_rExport.SaveData( nStt, nEnd );
+                m_rExport.mpParentFrame = m_pParentFrames.back();
+                m_rExport.WriteText( );
+                m_rExport.RestoreData();
             }
             break;
         case sw::Frame::eOle:
@@ -3165,6 +3175,10 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
 
     aColorString = impl_ConvertColor( aColor );
 
+    m_pSerializer->singleElementNS( XML_w, XML_color,
+            FSNS( XML_w, XML_val ), aColorString.getStr(), FSEND );
+    m_pSerializer->singleElementNS( XML_w, XML_color,
+            FSNS( XML_w, XML_val ), aColorString.getStr(), FSEND );
     m_pSerializer->singleElementNS( XML_w, XML_color,
             FSNS( XML_w, XML_val ), aColorString.getStr(), FSEND );
 }
@@ -4573,7 +4587,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_nTableDepth( 0 ),
       m_bParagraphOpened( false ),
       m_nColBreakStatus( COLBRK_NONE ),
-      m_pParentFrame( NULL ),
       m_closeHyperlinkInThisRun( false ),
       m_closeHyperlinkInPreviousRun( false ),
       m_startedHyperlink( false ),
@@ -4599,7 +4612,6 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pEndnotesList, m_pEndnotesList = NULL;
 
     delete m_pTableWrt, m_pTableWrt = NULL;
-    delete m_pParentFrame;
 }
 
 DocxExport& DocxAttributeOutput::GetExport()

@@ -595,7 +595,7 @@ private:
     // beginning of the next paragraph
     DocxColBreakStatus m_nColBreakStatus;
 
-    sw::Frame *m_pParentFrame;
+    std::vector<sw::Frame*> m_pParentFrames;
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;
     bool m_closeHyperlinkInPreviousRun;
