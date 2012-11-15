@@ -230,8 +230,6 @@ static void impl_AddColor( sax_fastparser::FastAttributeList *pAttrList, sal_Int
     if ( !pAttrList || ( nColor & 0xFF000000 ) )
         return;
 
-    nColor = ( ( nColor & 0xFF ) << 16 ) + ( nColor & 0xFF00 ) + ( ( nColor & 0xFF0000 ) >> 16 );
-
     const char *pColor = NULL;
     char pRgbColor[10];
     switch ( nColor )
