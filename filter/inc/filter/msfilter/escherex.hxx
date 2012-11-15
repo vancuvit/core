@@ -631,6 +631,12 @@ enum ESCHER_LineCap
     ESCHER_LineEndCapFlat     // Line ends at end point
 };
 
+enum ESCHER_PositionRelative
+{
+    ESCHER_Text,
+    ESCHER_Page
+};
+
 // Shape Properties
 // 1pt = 12700 EMU (English Metric Units)
 // 1pt = 20 Twip = 20/1440" = 1/72"
@@ -929,6 +935,8 @@ enum ESCHER_LineCap
 #define ESCHER_Prop_fOneD                       957  /*  sal_Bool            1D adjustment                                                                                          */
 #define ESCHER_Prop_fHidden                     958  /*  sal_Bool            Do not display                                                                                         */
 #define ESCHER_Prop_fPrint                      959  /*  sal_Bool            Print this shape                                                                                       */
+#define ESCHER_Prop_HoriRelation                960
+#define ESCHER_Prop_VertRelation                961
 
 #define ESCHER_PERSISTENTRY_PREALLOCATE     64
 

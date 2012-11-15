@@ -686,6 +686,22 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                     }
                 }
                 break;
+            case ESCHER_Prop_HoriRelation:
+            case ESCHER_Prop_VertRelation:
+                if (ESCHER_Prop_HoriRelation == nId)
+                    m_pShapeStyle->append( ";mso-position-horizontal-relative:" );
+                else
+                    m_pShapeStyle->append( ";mso-position-vertical-relative:" );
+                switch ( it->nPropValue )
+                {
+                    case ESCHER_Page:
+                        m_pShapeStyle->append("page");
+                        break;
+                    case ESCHER_Text:
+                        m_pShapeStyle->append("text");
+                        break;
+                }
+                break;
             default:
 #if OSL_DEBUG_LEVEL > 0
                 fprintf( stderr, "TODO VMLExport::Commit(), unimplemented id: %d, value: %" SAL_PRIuUINT32 ", data: [%" SAL_PRIuUINT32 ", %p]\n",
