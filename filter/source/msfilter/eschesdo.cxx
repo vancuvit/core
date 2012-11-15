@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/drawing/TextAdjust.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -274,7 +275,8 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 }
             }
         }
-        else if ( rObj.GetType().EqualsAscii( "drawing.Rectangle" ))
+        else if ( rObj.GetType().EqualsAscii( "drawing.Rectangle" ) ||
+            rObj.GetType().EqualsAscii( "Frame" ))
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             sal_Int32 nRadius = (sal_Int32)rObj.ImplGetInt32PropertyValue(
@@ -298,6 +300,29 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
             }
             aPropOpt.CreateFillProperties( rObj.mXPropSet, sal_True );
+            sal_Int32 color = (sal_Int32)rObj.ImplGetInt32PropertyValue(
+                                            ::rtl::OUString( "BackColorRGB" ));
+            aPropOpt.AddOpt( ESCHER_Prop_fillColor, color );
+            if (rObj.ImplGetPropertyValue(::rtl::OUString( "HoriOrientRelation" ) ) )
+            {
+                sal_Int16 rel = *( (sal_Int16*)rObj.GetUsrAny().getValue() );
+                switch (rel)
+                {
+                    case text::RelOrientation::PAGE_FRAME:
+                        aPropOpt.AddOpt( ESCHER_Prop_HoriRelation, ESCHER_Page );
+                        break;
+                }
+            }
+            if (rObj.ImplGetPropertyValue(::rtl::OUString( "VertOrientRelation" ) ))
+            {
+                sal_Int16 rel = *( (sal_Int16*)rObj.GetUsrAny().getValue() );
+                switch (rel)
+                {
+                    case text::RelOrientation::PAGE_FRAME:
+                        aPropOpt.AddOpt( ESCHER_Prop_VertRelation, ESCHER_Page );
+                        break;
+                }
+            }
             if( rObj.ImplGetText() )
                 aPropOpt.CreateTextProperties( rObj.mXPropSet,
                     mpEscherEx->QueryTextID( rObj.GetShapeRef(),
@@ -1037,7 +1062,9 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
         SetRect( rEx.ImplMapPoint( Point( mXShape->getPosition().X, mXShape->getPosition().Y ) ),
                  rEx.ImplMapSize( Size( mXShape->getSize().Width, mXShape->getSize().Height ) ) );
         mType = String( mXShape->getShapeType() );
-        mType.Erase( 0, nPrefix );  // strip "com.sun.star."
+        xub_StrLen nPrefixPos = mType.SearchAscii( aPrefix );
+        if( nPrefixPos == 0 )
+            mType.Erase( nPrefixPos, nPrefix );  // strip "com.sun.star."
         xub_StrLen nPos = mType.SearchAscii( "Shape" );
         mType.Erase( nPos, 5 );
 
