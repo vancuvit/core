@@ -2404,10 +2404,12 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
 awt::Point SwXFrame::getPosition(void) throw( uno::RuntimeException )
 {
-    SolarMutexGuard aGuard;
-    uno::RuntimeException aRuntime;
-    aRuntime.Message = C2U("position cannot be determined with this method");
-    throw aRuntime;
+    const ::uno::Any aVal1 = getPropertyValue(C2U("HoriOrientPosition"));
+    float posX = *( (sal_Int32*)aVal1.getValue() );
+    const ::uno::Any aVal2 = getPropertyValue(C2U("VertOrientPosition"));
+    float posY = *( (sal_Int32*)aVal2.getValue() );
+
+    return awt::Point(posX, posY);
 }
 
 void SwXFrame::setPosition(const awt::Point& /*aPosition*/) throw( uno::RuntimeException )
