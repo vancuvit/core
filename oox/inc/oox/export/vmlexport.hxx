@@ -72,6 +72,9 @@ class OOX_DLLPUBLIC VMLExport : public EscherEx
     /// Remember which shape types we had already written.
     bool *m_pShapeTypeWritten;
 
+    /// Control if shape's end tag must be written
+    bool m_writeShapeEndTag;
+
 public:
                         VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport = 0 );
     virtual             ~VMLExport();
@@ -83,6 +86,8 @@ public:
     ///
     /// Call this when you need to export the object as VML.
     sal_uInt32 AddSdrObject( const SdrObject& rObj );
+
+    void SetWriteShapeEndTag( bool write ) { m_writeShapeEndTag = write; }
 
 protected:
     /// Add an attribute to the generated <v:shape/> element.

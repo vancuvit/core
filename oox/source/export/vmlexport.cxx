@@ -46,7 +46,8 @@ VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* 
       m_pShapeAttrList( NULL ),
       m_nShapeType( ESCHER_ShpInst_Nil ),
       m_pShapeStyle( new OStringBuffer( 200 ) ),
-      m_pShapeTypeWritten( new bool[ ESCHER_ShpInst_COUNT ] )
+      m_pShapeTypeWritten( new bool[ ESCHER_ShpInst_COUNT ] ),
+      m_writeShapeEndTag( true )
 {
     mnGroupLevel = 1;
     memset( m_pShapeTypeWritten, 0, ESCHER_ShpInst_COUNT * sizeof( bool ) );
@@ -93,7 +94,8 @@ void VMLExport::CloseContainer()
 
         m_pSerializer->mergeTopMarks();
 
-        EndShape( nShapeElement );
+        if ( m_writeShapeEndTag )
+            EndShape( nShapeElement );
 
         // cleanup
         m_nShapeType = ESCHER_ShpInst_Nil;
