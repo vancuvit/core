@@ -464,7 +464,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, ScRefCellValue&
                 {
                     fValue = pFCell->GetValue();
                     pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
-                        rPos, pFCell );
+                        rPos );
                 }
                 else
                 {
@@ -981,7 +981,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
     {
         bool bInherited = (aCell.meType == CELLTYPE_FORMULA);
         if (pRetTypeExpr && pRetIndexExpr)
-            pDok->GetNumberFormatInfo(*pRetTypeExpr, *pRetIndexExpr, rAddress, (bInherited ? aCell.mpFormula : NULL));
+            pDok->GetNumberFormatInfo(*pRetTypeExpr, *pRetIndexExpr, rAddress);
         PushTempToken( new ScEmptyCellToken( bInherited, bDisplayEmptyAsString));
         return;
     }

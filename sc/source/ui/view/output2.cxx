@@ -595,15 +595,6 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
         // If it's formula, the result must be a value.
         if (!pFCell->IsValue())
             return;
-
-        if (pFCell->GetFormatType() != NUMBERFORMAT_NUMBER)
-        {
-            // Make sure the format type implicitly set by the interpreter is
-            // of pure numeric type.  We don't want to adjust date and time
-            // values here.
-            SetHashText();
-            return;
-        }
     }
 
     sal_uLong nFormat = GetResultValueFormat(rCell);
@@ -797,10 +788,7 @@ sal_uLong ScDrawStringsVars::GetResultValueFormat( const ScRefCellValue& rCell )
     // Get the effective number format, including formula result types.
     // This assumes that a formula cell has already been calculated.
 
-    if ((nValueFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 && rCell.meType == CELLTYPE_FORMULA)
-        return rCell.mpFormula->GetStandardFormat(*pOutput->mpDoc->GetFormatTable(), nValueFormat);
-    else
-        return nValueFormat;
+    return nValueFormat;
 }
 
 //==================================================================
