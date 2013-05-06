@@ -3725,8 +3725,14 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
 
-    sal_uInt8 cMatFlag = pMyFormulaCell->GetMatrixFlag();
-    bMatrixFormula = ( cMatFlag == MM_FORMULA || cMatFlag == MM_FAKE );
+    if(pMyFormulaCell)
+    {
+        sal_uInt8 cMatFlag = pMyFormulaCell->GetMatrixFlag();
+        bMatrixFormula = ( cMatFlag == MM_FORMULA || cMatFlag == MM_FAKE );
+    }
+    else
+        bMatrixFormula = false;
+
     if (!bGlobalStackInUse)
     {
         bGlobalStackInUse = true;
