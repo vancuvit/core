@@ -176,7 +176,6 @@ public:
     ScRefCellValue GetCellValue( SCROW nRow ) const;
     void        Insert( SCROW nRow, ScBaseCell* pCell );
     void        Insert( SCROW nRow, sal_uInt32 nFormatIndex, ScBaseCell* pCell );
-    void        Append( SCROW nRow, ScBaseCell* pCell );
     void        Delete( SCROW nRow );
     void        DeleteAtIndex( SCSIZE nIndex );
     void        FreeAll();
@@ -487,6 +486,8 @@ private:
     void CopyScriptTypesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
 
     void SetCell(SCROW nRow, ScBaseCell* pNewCell);
+
+    void        Append( SCROW nRow, ScBaseCell* pCell );
 };
 
 
