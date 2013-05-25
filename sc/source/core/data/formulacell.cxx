@@ -400,10 +400,9 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     pNext(0),
     pPreviousTrack(0),
     pNextTrack(0),
-    nFormatIndex(0),
-    nFormatType( NUMBERFORMAT_NUMBER ),
     nSeenInIteration(0),
     cMatrixFlag ( cMatInd ),
+    nFormatType ( NUMBERFORMAT_NUMBER ),
     bDirty( true ), // -> Because of the use of the Auto Pilot Function was: cMatInd != 0
     bChanged( false ),
     bRunning( false ),
@@ -435,10 +434,9 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     pNext(0),
     pPreviousTrack(0),
     pNextTrack(0),
-    nFormatIndex(0),
-    nFormatType( NUMBERFORMAT_NUMBER ),
     nSeenInIteration(0),
     cMatrixFlag ( cInd ),
+    nFormatType ( NUMBERFORMAT_NUMBER ),
     bDirty( NULL != pArr ), // -> Because of the use of the Auto Pilot Function was: cInd != 0
     bChanged( false ),
     bRunning( false ),
@@ -480,10 +478,9 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     pNext(0),
     pPreviousTrack(0),
     pNextTrack(0),
-    nFormatIndex( &rDoc == rCell.pDocument ? rCell.nFormatIndex : 0 ),
-    nFormatType( rCell.nFormatType ),
     nSeenInIteration(0),
     cMatrixFlag ( rCell.cMatrixFlag ),
+    nFormatType( rCell.nFormatType ),
     bDirty( rCell.bDirty ),
     bChanged( rCell.bChanged ),
     bRunning( false ),
@@ -767,7 +764,6 @@ void ScFormulaCell::CompileTokenArray( bool bNoListening )
         if( !pCode->GetCodeError() )
         {
             nFormatType = aComp.GetNumFormatType();
-            nFormatIndex = 0;
             bChanged = true;
             aResult.SetToken( NULL);
             bCompile = false;
@@ -817,7 +813,6 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
         if( !pCode->GetCodeError() )
         {
             nFormatType = aComp.GetNumFormatType();
-            nFormatIndex = 0;
             bChanged = true;
             bCompile = false;
             StartListeningTo( pDocument );
@@ -868,7 +863,6 @@ void ScFormulaCell::CalcAfterLoad()
         aComp.SetGrammar(pDocument->GetGrammar());
         bSubTotal = aComp.CompileTokenArray();
         nFormatType = aComp.GetNumFormatType();
-        nFormatIndex = 0;
         bDirty = true;
         bCompile = false;
         bNewCompiled = true;
@@ -1295,7 +1289,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         if( mbNeedsNumberFormat )
         {
-            sal_uInt16 nFormatType = p->GetRetFormatType();
+            nFormatType = p->GetRetFormatType();
             sal_Int32 nFormatIndex = p->GetRetFormatIndex();
 
             // don't set text format as hard format
@@ -1375,11 +1369,6 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
           && nFormatType != NUMBERFORMAT_DATETIME )
         {
             sal_uLong nFormat = pDocument->GetNumberFormat( aPos );
-            if ( nFormatIndex && (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-                nFormat = nFormatIndex;
-            if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-                nFormat = ScGlobal::GetStandardFormat(
-                    *pDocument->GetFormatTable(), nFormat, nFormatType );
             aResult.SetDouble( pDocument->RoundValueAsShown(
                         aResult.GetDouble(), nFormat));
         }
@@ -1505,8 +1494,6 @@ void ScFormulaCell::GetMatColsRows( SCCOL & nCols, SCROW & nRows ) const
 
 sal_uLong ScFormulaCell::GetStandardFormat( SvNumberFormatter& rFormatter, sal_uLong nFormat ) const
 {
-    if ( nFormatIndex && (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-        return nFormatIndex;
     //! not ScFormulaCell::IsValue(), that could reinterpret the formula again.
     if ( aResult.IsValue() )
         return ScGlobal::GetStandardFormat( aResult.GetDouble(), rFormatter, nFormat, nFormatType );
