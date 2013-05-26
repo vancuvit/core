@@ -1721,6 +1721,10 @@ void ScColumn::GetString( SCROW nRow, OUString& rString ) const
         aCell.assign(*maItems[nIndex].pCell);
         if (aCell.meType != CELLTYPE_NOTE)
         {
+            // ugly hack for ordering problem with GetNumberFormat and missing inherited formats
+            if(aCell.meType == CELLTYPE_FORMULA)
+                aCell.mpFormula->MaybeInterpret();
+
             sal_uLong nFormat = GetNumberFormat( nRow );
             ScCellFormat::GetString(aCell, nFormat, rString, &pColor, *(pDocument->GetFormatTable()));
         }
