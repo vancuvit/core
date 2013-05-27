@@ -196,6 +196,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/frame,\
 	DocumentTemplates \
 	Frame \
 	GlobalEventBroadcaster \
+	LayoutManager \
 	MediaTypeDetectionHelper \
 	ModuleManager \
     SessionListener \
@@ -941,7 +942,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/frame,\
 	FrameLoader \
 	FrameLoaderFactory \
 	FramesContainer \
-	LayoutManager \
 	PopupMenuController \
 	PopupMenuControllerFactory \
 	ProtocolHandler \
@@ -2599,6 +2599,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/frame,\
 	XGlobalEventBroadcaster \
 	XInterceptorInfo \
 	XLayoutManager \
+	XLayoutManager2 \
 	XLayoutManagerEventBroadcaster \
 	XLayoutManagerListener \
 	XLoadEventListener \
