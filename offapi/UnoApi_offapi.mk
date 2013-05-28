@@ -85,8 +85,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/chart2,\
 	LogarithmicScaling \
 	LinearRegressionCurve \
 	LinearScaling \
+	MovingAverageRegressionCurve \
 	PolarCoordinateSystem2d \
 	PolarCoordinateSystem3d \
+	PolynomialRegressionCurve \
 	PotentialRegressionCurve \
 	PowerScaling \
 	RegressionEquation \
