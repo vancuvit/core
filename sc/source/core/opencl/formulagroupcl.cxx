@@ -1292,6 +1292,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     const ScAddress& rTopPos, const ScFormulaCellGroupRef& xGroup,
     ScTokenArray& rCode )
 {
+    fprintf(stdout, "FormulaGroupInterpreterOpenCL::interpret:   opencl\n");
     generateRPNCode(rDoc, rTopPos, rCode);
     // printf("Vector width = %d\n", xGroup->mnLength);
     // Constructing "AST"
