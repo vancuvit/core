@@ -183,12 +183,12 @@ void ScOpenclTest::testCompilerNested()
     if (!enableOpenCL())
         return;
 
-    ScDocShellRef xDocSh = loadDoc("OpenCLTests/Compiler/nested.", ODS);
+    ScDocShellRef xDocSh = loadDoc("opencl/compiler/nested.", ODS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
 
-    ScDocShellRef xDocShRes = loadDoc("OpenCLTests/Compiler/nested.", ODS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/compiler/nested.", ODS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -207,12 +207,14 @@ void ScOpenclTest::testCompilerString()
     if (!enableOpenCL())
         return;
 
-    ScDocShellRef xDocSh = loadDoc("OpenCLTests/Compiler/string.", ODS);
+    ScDocShellRef xDocSh = loadDoc("opencl/compiler/string.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
 
-    ScDocShellRef xDocShRes = loadDoc("OpenCLTests/Compiler/string.", ODS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/compiler/string.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -234,12 +236,14 @@ void ScOpenclTest::testCompilerInEq()
     if (!enableOpenCL())
         return;
 
-    ScDocShellRef xDocSh = loadDoc("OpenCLTests/Compiler/ineq.", ODS);
+    ScDocShellRef xDocSh = loadDoc("opencl/compiler/ineq.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
 
-    ScDocShellRef xDocShRes = loadDoc("OpenCLTests/Compiler/ineq.", ODS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/compiler/ineq.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -418,11 +422,11 @@ void ScOpenclTest::testMathFormulaCos()
     if (!enableOpenCL())
         return;
 
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/math/cos.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/math/cos.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/math/cos.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/cos.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 15; ++i)
@@ -440,12 +444,12 @@ void ScOpenclTest::testFinacialFormula()
     if (!enableOpenCL())
         return;
 
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/general.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/general.", XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/general.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/general.", XLS);
     CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
@@ -598,10 +602,12 @@ void ScOpenclTest::testStatisticalFormulaCorrel()
     if (!enableOpenCL())
         return;
 
-    ScDocShellRef xDocSh = loadDoc("OpenCLTests/statistical/Correl.", ODS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Correl.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenCLTests/statistical/Correl.", ODS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Correl.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -620,10 +626,10 @@ void ScOpenclTest::testStatisticalFormulaFisher()
     if (!enableOpenCL())
         return;
 
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Fisher.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Fisher.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Fisher.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Fisher.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -642,10 +648,10 @@ void ScOpenclTest::testStatisticalFormulaFisherInv()
     if (!enableOpenCL())
         return;
 
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/FisherInv.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/FisherInv.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/FisherInv.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/FisherInv.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -664,10 +670,10 @@ void ScOpenclTest::testStatisticalFormulaGamma()
     if (!enableOpenCL())
         return;
 
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Gamma.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Gamma.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Gamma.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Gamma.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -685,11 +691,11 @@ void ScOpenclTest::testFinacialFvscheduleFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Fvschedule.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Fvschedule.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Fvschedule.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Fvschedule.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -707,11 +713,11 @@ void ScOpenclTest::testFinacialSYDFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/SYD.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/SYD.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/SYD.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/SYD.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -729,11 +735,11 @@ void ScOpenclTest::testFinacialIRRFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/IRR.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/IRR.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/IRR.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/IRR.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 6; ++i)
@@ -751,11 +757,11 @@ void ScOpenclTest::testStatisticalFormulaGammaLn()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/GammaLn.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/GammaLn.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
 
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/GammaLn.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/GammaLn.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -773,11 +779,11 @@ void ScOpenclTest::testStatisticalFormulaGauss()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Gauss.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Gauss.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Gauss.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Gauss.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -795,10 +801,10 @@ void ScOpenclTest::testStatisticalFormulaGeoMean()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/GeoMean.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/GeoMean.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/GeoMean.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/GeoMean.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -816,10 +822,10 @@ void ScOpenclTest::testStatisticalFormulaHarMean()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/HarMean.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/HarMean.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/HarMean.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/HarMean.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -837,11 +843,11 @@ void ScOpenclTest::testFinacialSLNFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/SLN.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/SLN.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/SLN.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/SLN.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -859,11 +865,11 @@ void ScOpenclTest::testFinacialMIRRFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/MIRR.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/MIRR.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/MIRR.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/MIRR.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 6; ++i)
@@ -882,11 +888,11 @@ void ScOpenclTest::testFinancialCoupdaybsFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Coupdaybs.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Coupdaybs.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Coupdaybs.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Coupdaybs.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 1; i <=10; ++i)
@@ -903,11 +909,11 @@ void ScOpenclTest::testFinacialDollardeFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Dollarde.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Dollarde.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Dollarde.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Dollarde.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -925,11 +931,11 @@ void ScOpenclTest::testFinancialCoupdaysFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Coupdays.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Coupdays.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Coupdays.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Coupdays.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 1; i <=10; ++i)
@@ -946,11 +952,11 @@ void ScOpenclTest::testFinancialCoupdaysncFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Coupdaysnc.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Coupdaysnc.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Coupdaysnc.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Coupdaysnc.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 1; i <=10; ++i)
@@ -966,11 +972,11 @@ void ScOpenclTest::testFinacialRateFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/RATE.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/RATE.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/RATE.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/RATE.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 1; i <= 5; ++i)
@@ -988,11 +994,11 @@ void ScOpenclTest::testFinancialAccrintmFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Accrintm.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Accrintm.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Accrintm.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Accrintm.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 1; i <= 10; ++i)
@@ -1009,10 +1015,10 @@ void ScOpenclTest::testStatisticalFormulaNegbinomdist()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Negbinomdist." ,XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Negbinomdist." ,XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Negbinomdist." ,XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Negbinomdist." ,XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -1031,11 +1037,11 @@ void ScOpenclTest::testFinacialDollarfrFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Dollarfr.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Dollarfr.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Dollarfr.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Dollarfr.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -1053,11 +1059,11 @@ void ScOpenclTest::testFinacialDISCFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/DISC.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/DISC.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/DISC.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/DISC.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -1075,11 +1081,11 @@ void ScOpenclTest::testFinacialINTRATEFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/INTRATE.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/INTRATE.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/INTRATE.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/INTRATE.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -1097,10 +1103,10 @@ void ScOpenclTest::testStatisticalFormulaPearson()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Pearson.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Pearson.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Pearson.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Pearson.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -1118,10 +1124,10 @@ void ScOpenclTest::testStatisticalFormulaRsq()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/statistical/Rsq.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Rsq.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/statistical/Rsq.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Rsq.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -1139,11 +1145,11 @@ void ScOpenclTest::testMathFormulaCsc()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenCLTests/math/csc.", ODS);
+    ScDocShellRef xDocSh = loadDoc("opencl/math/csc.", ODS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenCLTests/math/csc.", ODS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/math/csc.", ODS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 15; ++i)
@@ -1160,11 +1166,11 @@ void ScOpenclTest::testFinacialXNPVFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/XNPV.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/XNPV.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/XNPV.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/XNPV.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 1; i <= 9; ++i)
@@ -1187,11 +1193,11 @@ void ScOpenclTest::testFinacialPriceMatFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/PriceMat.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/PriceMat.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/PriceMat.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/PriceMat.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -1207,10 +1213,10 @@ void ScOpenclTest::testFinacialFormulaReceived()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Received.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Received.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Received.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Received.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -1227,10 +1233,10 @@ void ScOpenclTest::testFinancialFormulaCumipmt()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Cumipmt.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Cumipmt.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Cumipmt.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Cumipmt.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -1247,10 +1253,10 @@ void ScOpenclTest::testFinancialFormulaCumprinc()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Cumprinc.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Cumprinc.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Cumprinc.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Cumprinc.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -1267,11 +1273,11 @@ void ScOpenclTest::testFinacialRRIFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/RRI.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/RRI.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/RRI.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/RRI.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -1287,11 +1293,11 @@ void ScOpenclTest::testFinacialEFFECT_ADDFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/EFFECT_ADD.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/EFFECT_ADD.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/EFFECT_ADD.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/EFFECT_ADD.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 9; ++i)
@@ -1308,10 +1314,10 @@ void ScOpenclTest::testFinacialNominalFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/Nominal.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/Nominal.", XLS);
     ScDocument* pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);   xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/Nominal.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Nominal.", XLS);
     ScDocument* pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     // Check the results of formula cells in the shared formula range.
@@ -1328,11 +1334,11 @@ void ScOpenclTest::testFinacialTBILLEQFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/TBILLEQ.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/TBILLEQ.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/TBILLEQ.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/TBILLEQ.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 6; ++i)
@@ -1348,11 +1354,11 @@ void ScOpenclTest::testFinacialTBILLPRICEFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/TBILLPRICE.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/TBILLPRICE.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/TBILLPRICE.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/TBILLPRICE.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 6; ++i)
@@ -1368,11 +1374,11 @@ void ScOpenclTest::testFinacialTBILLYIELDFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/TBILLYIELD.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/TBILLYIELD.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/TBILLYIELD.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/TBILLYIELD.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 6; ++i)
@@ -1388,11 +1394,11 @@ void ScOpenclTest::testFinacialYIELDFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/YIELD.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/YIELD.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/YIELD.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/YIELD.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 6; ++i)
@@ -1409,11 +1415,11 @@ void ScOpenclTest::testFinacialYIELDDISCFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/YIELDDISC.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/YIELDDISC.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/YIELDDISC.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/YIELDDISC.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 6; ++i)
@@ -1430,11 +1436,11 @@ void ScOpenclTest::testFinacialYIELDMATFormula()
 {
     if (!enableOpenCL())
         return;
-    ScDocShellRef xDocSh = loadDoc("OpenclCase/financial/YIELDMAT.", XLS);
+    ScDocShellRef xDocSh = loadDoc("opencl/financial/YIELDMAT.", XLS);
     ScDocument *pDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(pDoc);
     xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("OpenclCase/financial/YIELDMAT.", XLS);
+    ScDocShellRef xDocShRes = loadDoc("opencl/financial/YIELDMAT.", XLS);
     ScDocument *pDocRes = xDocShRes->GetDocument();
     CPPUNIT_ASSERT(pDocRes);
     for (SCROW i = 0; i <= 6; ++i)
