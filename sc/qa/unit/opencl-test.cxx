@@ -119,7 +119,7 @@ public:
     void testFinacialYIELDDISCFormula();
     void testFinacialYIELDMATFormula();
     CPPUNIT_TEST_SUITE(ScOpenclTest);
-//  CPPUNIT_TEST(testSharedFormulaXLS);
+    CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
     CPPUNIT_TEST(testStatisticalFormulaFisher);
     CPPUNIT_TEST(testStatisticalFormulaFisherInv);
