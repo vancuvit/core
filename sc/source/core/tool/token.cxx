@@ -1450,6 +1450,7 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case ocBinomDist:
             case ocVarP:
             case ocCeil:
+            case ocKombin:
             // Don't change the state.
             break;
             default:
