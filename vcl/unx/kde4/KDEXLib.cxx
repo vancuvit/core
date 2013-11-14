@@ -329,16 +329,47 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
+#ifdef SINGLE_EVENT
+static bool singleEventFilter( void *message )
+{
+    static bool has_processed = true;
+    has_processed = !has_processed;
+    return has_processed;
+}
+
+void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
+#else
 // Qts processEvent always processes all pending events,
 // so we can ignore the second parameter 'bHandleAllCurrentEvents'.
 void KDEXLib::processYield( bool bWait, bool )
+#endif
 {
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread() );
+#ifdef SINGLE_EVENT
+    bool processed;
+    QAbstractEventDispatcher::EventFilter old_filter;
 
+    // Fake single event handling by installing our event filter
+    if ( !bHandleAllCurrentEvents )
+        old_filter = dispatcher->setEventFilter( singleEventFilter );
+
+    if ( bWait )
+        processed = dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
+    else
+        processed = dispatcher->processEvents( QEventLoop::AllEvents );
+
+    // Uninstall and eventuall reset the filter.
+    if ( !bHandleAllCurrentEvents ) {
+        dispatcher->setEventFilter( old_filter );
+        if ( !processed )
+            singleEventFilter( NULL );
+    }
+#else
     if ( bWait )
         dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
     else
         dispatcher->processEvents( QEventLoop::AllEvents );
+#endif
 }
 
 void KDEXLib::StartTimer( sal_uLong nMS )
