@@ -2292,7 +2292,6 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         if (err != CL_SUCCESS)
             throw OpenCLError(err);
         delete mpKernel;
-        return true;
     }
 #undef NO_FALLBACK_TO_SWINTERP /* undef this for non-TDD runs */
     catch (const UnhandledToken &ut) {
