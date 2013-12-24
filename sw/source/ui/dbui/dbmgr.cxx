@@ -704,6 +704,7 @@ sal_Bool SwNewDBMgr::GetColumnNames(ListBox* pListBox,
     Description: CTOR
  --------------------------------------------------------------------*/
 SwNewDBMgr::SwNewDBMgr() :
+            bCancel(sal_False),
             bInitDBFields(sal_False),
             bInMerge(sal_False),
             bMergeSilent(sal_False),
@@ -1000,7 +1001,6 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     {
                         ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
                         bNoError = sal_False;
-                        bCancel = sal_True;
                     }
                     else
                     {
@@ -1142,7 +1142,6 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 {
                                     // error message ??
                                     ErrorHandler::HandleError( xWorkDocSh->GetError() );
-                                    bCancel = sal_True;
                                     bNoError = sal_False;
                                 }
                                 if( bEMail )
@@ -1240,7 +1239,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         ::std::bind2nd(::std::mem_fun(&SwRootFrm::FreezeLayout), true));
                     bFreezedLayouts = true;
                 }
-            } while( !bCancel &&
+            } while( !bCancel && bNoError &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
 
             // Unfreeze target document layouts and correct all PageDescs.
@@ -2708,7 +2707,6 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         OSL_FAIL("exception in MergeNew()");
     }
 
-    //bCancel is set from the PrintMonitor
     bCancel = sal_False;
 
     CreateMonitor aMonitorDlg(&rSourceView.GetEditWin());
