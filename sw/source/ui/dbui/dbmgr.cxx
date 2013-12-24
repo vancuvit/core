@@ -849,8 +849,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 OUString("text/plain; charset=UTF-8; format=flowed");
     }
 
+    class MailMergeCancelException : public Exception {};
     uno::Reference< XPropertySet > xColumnProp;
-    {
+    try {
         bool bColumnName = !sEMailAddrFld.isEmpty();
 
         if (bColumnName)
@@ -858,7 +859,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             uno::Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
             uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
             if(!xCols->hasByName(sEMailAddrFld))
-                return sal_False;
+                throw MailMergeCancelException();
             Any aCol = xCols->getByName(sEMailAddrFld);
             aCol >>= xColumnProp;
         }
@@ -867,7 +868,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         SfxDispatcher* pSfxDispatcher = pSourceShell->GetView().GetViewFrame()->GetDispatcher();
         SwDocShell* pSourceDocSh = pSourceShell->GetView().GetDocShell();
         pSfxDispatcher->Execute( pSourceDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
-        if( !pSourceDocSh->IsModified() )
+        if( pSourceDocSh->IsModified() )
+            throw MailMergeCancelException();
+
         {
             const SfxFilter* pStoreToFilter = SwIoSystem::GetFileFilter(
                 pSourceDocSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), ::aEmptyOUStr );
@@ -1342,6 +1345,14 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
             SW_MOD()->SetView(&pSourceShell->GetView());
         }
+    }
+    catch(const MailMergeCancelException&)
+    {
+        bNoError = sal_False;
+    }
+    catch(const Exception&)
+    {
+        OSL_FAIL("exception caught in SwNewDBMgr::MergeMailFiles");
     }
 
     if(bEMail)
