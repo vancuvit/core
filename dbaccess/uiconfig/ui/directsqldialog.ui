@@ -209,18 +209,12 @@
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow2">
+                  <object class="GtkTextView" id="status:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="vscrollbar_policy">always</property>
                     <property name="shadow_type">in</property>
-                    <child>
-                      <object class="GtkTextView" id="status:border">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="editable">False</property>
-                      </object>
-                    </child>
+                    <property name="editable">False</property>
                   </object>
                 </child>
               </object>
@@ -255,19 +249,13 @@
                 <property name="top_padding">6</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                  <object class="GtkTextView" id="output:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">always</property>
                     <property name="vscrollbar_policy">always</property>
                     <property name="shadow_type">in</property>
-                    <child>
-                      <object class="GtkTextView" id="output:border">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="editable">False</property>
-                      </object>
-                    </child>
+                    <property name="editable">False</property>
                   </object>
                 </child>
               </object>

@@ -30,7 +30,7 @@
             <property name="vexpand">True</property>
             <property name="row_spacing">6</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow1">
+              <object class="GtkTextView" id="addredit:border">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
@@ -38,14 +38,6 @@
                 <property name="hscrollbar_policy">always</property>
                 <property name="vscrollbar_policy">always</property>
                 <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTextView" id="addredit:border">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -269,7 +261,7 @@
             <property name="vexpand">True</property>
             <property name="row_spacing">6</property>
             <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow2">
+              <object class="GtkTextView" id="senderedit:border">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
@@ -277,17 +269,9 @@
                 <property name="hscrollbar_policy">always</property>
                 <property name="vscrollbar_policy">always</property>
                 <property name="shadow_type">in</property>
-                <child>
-                  <object class="GtkTextView" id="senderedit:border">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="vexpand">True</property>
-                    <accessibility>
-                      <relation type="labelled-by" target="sender"/>
-                    </accessibility>
-                  </object>
-                </child>
+                <accessibility>
+                  <relation type="labelled-by" target="sender"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left_attach">0</property>

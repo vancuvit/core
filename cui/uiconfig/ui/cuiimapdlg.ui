@@ -280,24 +280,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                  <object class="GtkTextView" id="descTV:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="vscrollbar_policy">always</property>
                     <property name="shadow_type">in</property>
-                    <child>
-                      <object class="GtkTextView" id="descTV:border">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                        <property name="hscroll_policy">natural</property>
-                        <property name="vscroll_policy">natural</property>
-                        <property name="wrap_mode">word</property>
-                      </object>
-                    </child>
+                    <property name="wrap_mode">word</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

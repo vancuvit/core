@@ -213,7 +213,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="scrolledwindow1">
+                      <object class="GtkTextView" id="errors:border">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
@@ -221,18 +221,9 @@
                         <property name="hscrollbar_policy">always</property>
                         <property name="vscrollbar_policy">always</property>
                         <property name="shadow_type">in</property>
-                        <child>
-                          <object class="GtkTextView" id="errors:border">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
-                            <property name="editable">False</property>
-                            <property name="wrap_mode">word</property>
-                            <property name="cursor_visible">False</property>
-                            <property name="buffer">textbuffer1</property>
-                          </object>
-                        </child>
+                        <property name="editable">False</property>
+                        <property name="wrap_mode">word</property>
+                        <property name="cursor_visible">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

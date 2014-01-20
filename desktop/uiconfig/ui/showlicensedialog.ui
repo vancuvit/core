@@ -40,22 +40,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="scrolledwindow1">
+          <object class="GtkTextView" id="textview:border">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="vscrollbar_policy">always</property>
             <property name="shadow_type">in</property>
-            <child>
-              <object class="GtkTextView" id="textview:border">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="editable">False</property>
-              </object>
-            </child>
+            <property name="editable">False</property>
           </object>
           <packing>
             <property name="expand">False</property>
