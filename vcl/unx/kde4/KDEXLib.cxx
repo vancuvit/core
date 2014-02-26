@@ -58,7 +58,8 @@
 KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false), m_pApplication(0),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
-    eventLoopType( LibreOfficeEventLoop )
+    eventLoopType( LibreOfficeEventLoop ),
+    m_bYieldFrozen( false )
 {
     // the timers created here means they belong to the main thread
     connect( &timeoutTimer, SIGNAL( timeout()), this, SLOT( timeoutActivated()));
@@ -213,6 +214,7 @@ void KDEXLib::setupEventLoop()
         eventLoopType = GlibEventLoop;
         old_gpoll = g_main_context_get_poll_func( NULL );
         g_main_context_set_poll_func( NULL, gpoll_wrapper );
+        m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
         return;
     }
 #endif
@@ -271,6 +273,8 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         }
         return SalXLib::Yield( bWait, bHandleAllCurrentEvents );
     }
+
+    if (m_bYieldFrozen) return;
 
     // if we are the main thread (which is where the event processing is done),
     // good, just do it
@@ -416,7 +420,7 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDEXLib::createFilePicker(
         SalYieldMutexReleaser aReleaser;
         return Q_EMIT createFilePickerSignal( xMSF );
     }
-    return uno::Reference< ui::dialogs::XFilePicker2 >( new KDE4FilePicker( xMSF ) );
+    return uno::Reference< ui::dialogs::XFilePicker2 >( new KDE4FilePicker( xMSF, this ) );
 }
 
 #include "KDEXLib.moc"
