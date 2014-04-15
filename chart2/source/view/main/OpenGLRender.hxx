@@ -85,6 +85,7 @@ public:
 
     void prepareToRender();
     void renderToBitmap();
+    void finishRender();
 
     int RenderRectangleShape(bool bBorder, bool bFill);
     int RectangleShapePoint(float x, float y, float directionX, float directionY);

@@ -20,6 +20,7 @@ class VCLOPENGL_DLLPUBLIC OpenGLHelper
 public:
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
 
+    static void SwapBuffers();
 };
 
 #endif

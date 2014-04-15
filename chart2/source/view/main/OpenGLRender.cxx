@@ -309,6 +309,11 @@ int OpenGLRender::RenderLine2FBO(int)
     return 0;
 }
 
+void OpenGLRender::finishRender()
+{
+    OpenGLHelper::SwapBuffers();
+}
+
 #if DEBUG_POSITIONING
 void OpenGLRender::renderDebug()
 {
@@ -341,28 +346,6 @@ void OpenGLRender::renderDebug()
 void OpenGLRender::prepareToRender()
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
-    if (!m_FboID)
-    {
-        // create a texture object
-        CreateTextureObj(m_iWidth, m_iHeight);
-        //create render buffer object
-        CreateRenderObj(m_iWidth, m_iHeight);
-        //create fbo
-        CreateFrameBufferObj();
-        if (mbArbMultisampleSupported)
-        {
-            CreateMultiSampleFrameBufObj();
-        }
-    }
-    //bind fbo
-    if (mbArbMultisampleSupported)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER,m_frameBufferMS);
-    }
-    else
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
-    }
 
     // Clear the screen
     glClearDepth(1.0f);
@@ -430,47 +413,12 @@ int OpenGLRender::CreateTextureObj(int width, int height)
     return 0;
 }
 
-int OpenGLRender::CreateRenderObj(int width, int height)
-{
-    glGenRenderbuffers(1, &m_RboID);
-    CHECK_GL_ERROR();
-    glBindRenderbuffer(GL_RENDERBUFFER, m_RboID);
-    CHECK_GL_ERROR();
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-    CHECK_GL_ERROR();
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    CHECK_GL_ERROR();
-    return 0;
-}
-
 int OpenGLRender::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
 {
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
     glm::mat4 aRotationMatrix = glm::eulerAngleYXZ(angle.y, angle.x, angle.z);
     m_Model = aTranslationMatrix * aRotationMatrix * aScaleMatrix;
-    return 0;
-}
-
-int OpenGLRender::CreateFrameBufferObj()
-{
-    GLenum status;
-    // create a framebuffer object, you need to delete them when program exits.
-    glGenFramebuffers(1, &m_FboID);
-    CHECK_GL_FRAME_BUFFER_STATUS();
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
-    glBindTexture(GL_TEXTURE_2D, m_TextureObj);
-    // attach a texture to FBO color attachement point
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj, 0);
-    CHECK_GL_FRAME_BUFFER_STATUS();
-    glBindTexture(GL_TEXTURE_2D, 0);
-    // attach a renderbuffer to depth attachment point
-    glBindRenderbuffer(GL_RENDERBUFFER, m_RboID);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID);
-    CHECK_GL_FRAME_BUFFER_STATUS();
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
     return 0;
 }
 
@@ -483,12 +431,7 @@ void OpenGLRender::Release()
     glDeleteProgram(m_TextProID);
     glDeleteProgram(m_BackgroundProID);
     glDeleteProgram(m_SymbolProID);
-    glDeleteFramebuffers(1, &m_FboID);
-    glDeleteFramebuffers(1, &m_frameBufferMS);
     glDeleteTextures(1, &m_TextureObj);
-    glDeleteRenderbuffers(1, &m_RboID);
-    glDeleteRenderbuffers(1, &m_renderBufferColorMS);
-    glDeleteRenderbuffers(1, &m_renderBufferDepthMS);
 }
 
 OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)

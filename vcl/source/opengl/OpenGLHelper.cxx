@@ -15,6 +15,8 @@
 
 #include <vector>
 
+#include <GL/glxew.h>
+
 namespace {
 
 OUString getShaderFolder()
@@ -140,6 +142,13 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
     glDeleteShader(FragmentShaderID);
 
     return ProgramID;
+}
+
+void OpenGLHelper::SwapBuffers()
+{
+    Display* pDisplay = glXGetCurrentDisplay();
+    GLXDrawable drawable = glXGetCurrentDrawable();
+    glXSwapBuffers(pDisplay, drawable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
