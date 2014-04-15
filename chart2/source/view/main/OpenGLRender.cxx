@@ -396,7 +396,7 @@ void OpenGLRender::renderToBitmap()
 
 #if RENDER_TO_FILE
     BitmapEx aBitmap = GetAsBitmap();
-    OUString aName = "D:\\shaderout_" + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
+    OUString aName = "file:///home/moggi/Documents/work/bitmap_" + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
     try {
         vcl::PNGWriter aWriter( aBitmap );
         SvFileStream sOutput( aName, STREAM_WRITE );
