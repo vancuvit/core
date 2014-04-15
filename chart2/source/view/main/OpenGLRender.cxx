@@ -41,8 +41,6 @@
 
 using namespace com::sun::star;
 
-using namespace std;
-
 #define DEBUG_PNG 0
 
 #if DEBUG_PNG || RENDER_TO_FILE
