@@ -44,11 +44,8 @@ using namespace com::sun::star;
 using namespace std;
 
 #define DEBUG_PNG 0
-#if RENDER_TO_FILE
-#define BMP_HEADER_LEN 54
-#endif
 
-#if DEBUG_PNG
+#if DEBUG_PNG || RENDER_TO_FILE
 #include <vcl/pngwrite.hxx>
 #endif
 
@@ -400,15 +397,16 @@ void OpenGLRender::renderToBitmap()
     glBindFramebuffer(GL_FRAMEBUFFER, m_FboID);
 
 #if RENDER_TO_FILE
-    char fileName[256] = {0};
-    sprintf(fileName, "D:\\shaderout_%d_%d.bmp", m_iWidth, m_iHeight);
-    sal_uInt8 *buf = (sal_uInt8 *)malloc(m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN);
-    CreateBMPHeader(buf, m_iWidth, m_iHeight);
-    glReadPixels(0, 0, m_iWidth, m_iHeight, GL_BGR, GL_UNSIGNED_BYTE, buf + BMP_HEADER_LEN);
-    FILE *pfile = fopen(fileName,"wb");
-    fwrite(buf,m_iWidth * m_iHeight * 3 + BMP_HEADER_LEN, 1, pfile);
-    free(buf);
-    fclose(pfile);
+    BitmapEx aBitmap = GetAsBitmap();
+    OUString aName = "D:\\shaderout_" + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
+    try {
+        vcl::PNGWriter aWriter( aBitmap );
+        SvFileStream sOutput( aName, STREAM_WRITE );
+        aWriter.Write( sOutput );
+        sOutput.Close();
+    } catch (...) {
+        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
+    }
 #else
     Graphic aGraphic( GetAsBitmap() );
     uno::Reference< awt::XBitmap> xBmp( aGraphic.GetXGraphic(), uno::UNO_QUERY );
@@ -556,38 +554,6 @@ void OpenGLRender::SetSize(int width, int height)
     m_iHeight = height;
     m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
 }
-
-#if RENDER_TO_FILE
-int OpenGLRender::CreateBMPHeader(sal_uInt8 *bmpHeader, int xsize, int ysize)
-{
-    unsigned char header[BMP_HEADER_LEN] = {
-        0x42, 0x4d, 0, 0, 0, 0, 0, 0, 0, 0,
-        54, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0
-    };
-
-    long file_size = (long)xsize * (long)ysize * 3 + 54;
-    header[2] = (unsigned char)(file_size &0x000000ff);
-    header[3] = (file_size >> 8) & 0x000000ff;
-    header[4] = (file_size >> 16) & 0x000000ff;
-    header[5] = (file_size >> 24) & 0x000000ff;
-
-    long width = xsize;
-    header[18] = width & 0x000000ff;
-    header[19] = (width >> 8) &0x000000ff;
-    header[20] = (width >> 16) &0x000000ff;
-    header[21] = (width >> 24) &0x000000ff;
-
-    long height = -ysize;
-    header[22] = height &0x000000ff;
-    header[23] = (height >> 8) &0x000000ff;
-    header[24] = (height >> 16) &0x000000ff;
-    header[25] = (height >> 24) &0x000000ff;
-    memcpy(bmpHeader, header, BMP_HEADER_LEN);
-    return 0;
-}
-#endif
 
 void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha)
 {
