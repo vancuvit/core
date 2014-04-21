@@ -12,7 +12,8 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,freetype,freetype))
 $(eval $(call gb_ExternalPackage_use_external_project,freetype,freetype))
 
 ifeq ($(COM),MSC)
-$(eval $(call gb_ExternalPackage_add_files,freetype,$(call gb_UnpackedTarball_get_dir,freetype/instdir), \
+$(eval $(call gb_ExternalPackage_add_file,freetype, \
+	$(call gb_UnpackedTarball_get_dir,LinkTarget/StaticLibrary/freetype.lib), \
 	objs/win32/vc2010/freetype248.lib \
 ))
 endif
