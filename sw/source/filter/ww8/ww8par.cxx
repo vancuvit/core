@@ -4895,8 +4895,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     pAnchorStck = new SwWW8FltAnchorStack(&rDoc, nFieldFlags);
 
-    sal_uInt16 nPageDescOffset = rDoc.GetPageDescCnt();
-
     SwNodeIndex aSttNdIdx( rDoc.GetNodes() );
     SwRelNumRuleSpaces aRelNumRule(rDoc, mbNewDoc);
 
@@ -5314,7 +5312,15 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     if (mbNewDoc)
       rDoc.SetRedlineMode((RedlineMode_t)( eMode ));
 
-    UpdatePageDescs(rDoc, nPageDescOffset);
+    // Update document page descriptors (only this way also left pages
+    // get adjusted)
+
+    // PageDesc "Standard"
+//    rDoc.ChgPageDesc(0, rDoc.GetPageDesc(0));
+
+    // PageDescs "Convert..."
+    for (sal_uInt16 i = 0; i < rDoc.GetPageDescCnt(); ++i)
+        rDoc.ChgPageDesc(i, rDoc.GetPageDesc(i));
 
     delete pPaM, pPaM = 0;
     return nErrRet;

@@ -41,10 +41,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 #if OSL_DEBUG_LEVEL > 0
     // SS does not change PageDesc, but only sets the attibute.
     // The Pagedesc should be available in the document
-    bool bFound = false;
-    for ( sal_uInt16 nTst = 0; nTst < GetPageDescCnt(); ++nTst )
-        if ( &rDesc == &GetPageDesc( nTst ) )
-            bFound = true;
+    bool bFound = (&rDesc == GetDoc()->FindPageDescByName( rDesc.GetName() ));
     OSL_ENSURE( bFound, "ChgCurPageDesc with invalid descriptor." );
 #endif
 
@@ -131,8 +128,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
         if( USHRT_MAX != nPoolId &&
             0 != (pDesc = GetDoc()->GetPageDescFromPool( nPoolId ))
             && pPos )
-                // appended always
-            *pPos = GetDoc()->GetPageDescCnt() - 1 ;
+            GetDoc()->FindPageDescByName( pDesc->GetName(), pPos );
     }
     return pDesc;
 }
@@ -148,11 +144,9 @@ sal_uInt16 SwFEShell::GetMousePageDesc( const Point &rPt ) const
             while( pPage->GetNext() && rPt.Y() > pPage->Frm().Bottom() )
                 pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
             SwDoc *pMyDoc = GetDoc();
-            for ( sal_uInt16 i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
-            {
-                if ( pPage->GetPageDesc() == &pMyDoc->GetPageDesc(i) )
-                    return i;
-            }
+            sal_uInt16 pPos;
+            if (pMyDoc->FindPageDescByName( pPage->GetPageDesc()->GetName(), &pPos ) )
+                return pPos;
         }
     }
     return 0;

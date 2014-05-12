@@ -782,6 +782,18 @@ SwPageDesc* SwDoc::FindPageDescByName( const OUString & rName, sal_uInt16* pPos 
     return lcl_FindPageDescByName( const_cast <SwPageDescs *>( &maPageDescs ), rName, pPos );
 }
 
+SwPageDesc* SwDoc::FindPageDescByPoolId( sal_uInt16 nPoolId, sal_uInt16 *pPos )
+{
+    for( sal_uInt16 i=0; i < maPageDescs.size(); i++ )
+        if (maPageDescs[ i ]->GetPoolFmtId() == nPoolId ) {
+             if (pPos)
+                 *pPos = i;
+             return maPageDescs[ i ];
+        }
+
+    return 0;
+}
+
 void SwDoc::DelPageDesc( const OUString & rName, bool bBroadcast )
 {
     sal_uInt16 nI;
