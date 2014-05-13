@@ -26,6 +26,7 @@
 #include <frmfmt.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/borderline.hxx>
+#include <o3tl/sorted_vector.hxx>
 
 class SfxPoolItem;
 class SwTxtFmtColl;
@@ -344,45 +345,30 @@ public:
     operator SwPageDesc() const; // #i7983#
 };
 
-typedef std::vector<SwPageDesc*> SwPageDescsBase;
+struct CompareSwPageDescs
+{
+    bool operator()(OUString const& lhs, SwPageDesc* const& rhs) const;
+    bool operator()(SwPageDesc* const& lhs, OUString const& rhs) const;
+    bool operator()(SwPageDesc* const& lhs, SwPageDesc* const& rhs) const;
+};
+
+typedef o3tl::sorted_vector<SwPageDesc*, CompareSwPageDescs> SwPageDescsBase;
 
 // PageDescriptor-interface, Array because of inlines.
-// Mimics o3tl::sorted_vector interface
-class SwPageDescs : private SwPageDescsBase
+class SwPageDescs : public SwPageDescsBase
 {
 public:
-    typedef typename SwPageDescsBase::const_iterator const_iterator;
-    typedef typename SwPageDescsBase::size_type size_type;
-    typedef typename SwPageDescsBase::value_type value_type;
-
+    SwPageDescs();
     // the destructor will free all objects still in the vector
     ~SwPageDescs();
 
-    using SwPageDescsBase::clear;
-    using SwPageDescsBase::empty;
-    using SwPageDescsBase::size;
+    using SwPageDescsBase::find;
+    const_iterator find( const OUString &name ) const;
 
-    std::pair<const_iterator,bool> insert( const value_type& x );
+    std::pair<const_iterator, bool> insert( const value_type& x );
     size_type erase( const value_type& x );
     void erase( size_type index );
     void erase( const_iterator const& position );
-
-    const value_type& front() const { return SwPageDescsBase::front(); }
-    const value_type& back() const { return SwPageDescsBase::back(); }
-    const value_type& operator[]( size_t index ) const
-        { return SwPageDescsBase::operator[]( index ); }
-
-    void DeleteAndDestroyAll();
-    const_iterator find( const OUString &name ) const;
-    const_iterator find( const value_type pd ) const;
-
-    const_iterator begin() const { return SwPageDescsBase::begin(); }
-    const_iterator end() const { return SwPageDescsBase::end(); }
-
-private:
-    typedef typename SwPageDescsBase::iterator iterator;
-    iterator begin_nonconst() { return SwPageDescsBase::begin(); }
-    iterator end_nonconst() { return SwPageDescsBase::end(); }
 };
 
 #endif // INCLUDED_SW_INC_PAGEDESC_HXX

@@ -471,79 +471,70 @@ SwPageDescExt::operator SwPageDesc() const
     return aResult;
 }
 
+SwPageDescs::SwPageDescs() : SwPageDescsBase(true)
+{
+}
+
 SwPageDescs::~SwPageDescs()
 {
     DeleteAndDestroyAll();
 }
 
-void SwPageDescs::DeleteAndDestroyAll()
+std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::insert( const SwPageDescs::value_type& x )
 {
-    for( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
-    clear();
-}
-
-std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::insert( const value_type& x )
-{
-    const_iterator const ret = find( x );
-    if (ret == end()) {
-        SwPageDescsBase::push_back( x );
+    std::pair<SwPageDescs::const_iterator,bool> ret = SwPageDescsBase::insert( x );
+    if (ret.second) {
         SAL_WARN_IF(x->list == 0, "sw", "Inserting already assigned item");
         x->list = this;
-        return std::make_pair(end() -1 , true);
     }
-    return std::make_pair(ret, false);
+    return ret;
 }
 
-SwPageDescs::size_type SwPageDescs::erase( const value_type& x )
+SwPageDescs::size_type SwPageDescs::erase( const SwPageDescs::value_type& x )
 {
-    const_iterator const ret = find( x );
-    if (ret != end()) {
-        SwPageDescsBase::erase( begin_nonconst() + (ret - begin()) );
+    size_type ret = SwPageDescsBase::erase( x );
+    if (ret)
         x->list = 0;
-        return 1;
-    }
-    return 0;
+    return ret;
 }
 
-void SwPageDescs::erase( SwPageDescs::size_type index )
+void SwPageDescs::erase( size_type index )
 {
-    erase( begin_nonconst() + index );
+    (*this)[ index ]->list = 0;
+    SwPageDescsBase::erase( index );
 }
 
-void SwPageDescs::erase( SwPageDescs::const_iterator const& position )
+void SwPageDescs::erase(const_iterator const& position)
 {
     (*position)->list = 0;
-    SwPageDescsBase::erase( begin_nonconst() + (position - begin()) );
+    SwPageDescsBase::erase( position );
 }
 
-struct spd_oustring_compare : public std::unary_function<SwPageDesc*, bool>
+bool CompareSwPageDescs::operator()(OUString const& lhs, SwPageDesc* const& rhs) const
 {
-    spd_oustring_compare(const OUString &_baseline) : baseline(_baseline) {}
-    bool operator() (SwPageDesc* const &arg)
-        { return (baseline.compareTo( arg->GetName() ) == 0); }
-    const OUString baseline;
-};
+    return (lhs.compareTo( rhs->GetName() ) < 0);
+}
 
-struct spd_item_compare : public std::unary_function<SwPageDesc*, bool>
+bool CompareSwPageDescs::operator()(SwPageDesc* const& lhs, OUString const& rhs) const
 {
-    spd_item_compare(const SwPageDesc* _baseline) : baseline(_baseline) {}
-    bool operator() (SwPageDesc* const &arg)
-        { return (baseline->GetName().compareTo( arg->GetName() ) == 0); }
-    const SwPageDesc* baseline;
-};
+    return (lhs->GetName().compareTo( rhs ) < 0);
+}
+
+bool CompareSwPageDescs::operator()(SwPageDesc* const& lhs, SwPageDesc* const& rhs) const
+{
+    return (lhs->GetName().compareTo( rhs->GetName() ) < 0);
+}
 
 SwPageDescs::const_iterator SwPageDescs::find( const OUString &name ) const
 {
-    const_iterator const it = std::find_if(
-        begin(), end(), spd_oustring_compare( name ) );
-    return it;
-}
+    if (empty())
+        return end();
 
-SwPageDescs::const_iterator SwPageDescs::find( const value_type pd ) const
-{
-    const_iterator const it = std::find_if(
-        begin(), end(), spd_item_compare( pd ) );
+    const_iterator const it = std::lower_bound( begin() + 1, end(), name, CompareSwPageDescs() );
+    bool found = (it != end() && !CompareSwPageDescs()(name, *it));
+
+    if (!found && (0 == name.compareTo( (*this)[0]->GetName() )) )
+        return begin();
     return it;
 }
 
