@@ -300,6 +300,9 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
 }
 void DomainMapper_Impl::AddDummyParaForTableInSection()
 {
+    // Shapes can't have sections.
+    if (IsInShape())
+        return;
 
     if (!m_aTextAppendStack.empty())
     {
